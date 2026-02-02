@@ -1,3 +1,7 @@
+import dns from "node:dns";
+dns.setServers(["1.1.1.1"]);
+dns.setDefaultResultOrder("ipv4first");
+
 import colors from "colors";
 import mongoose from "mongoose";
 import User, {IUser} from "../models/User";
