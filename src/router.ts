@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { body } from "express-validator";
-import { createAccount, getUser, login } from "./handlers";
+import { createAccount, getUser, login, updateProfile } from "./handlers";
 import { handleInputErros } from "./middleware/validation";
 import { authenticate } from "./middleware/auth";
 
@@ -19,7 +19,7 @@ router.post('/auth/register',
         .isEmail()
         .withMessage("Invlid e-mail."),
     body('password')
-        .isLength({min: 8})
+        .isLength({ min: 8 })
         .withMessage("The password must be at least 8 characters."),
 
     handleInputErros,
@@ -27,19 +27,33 @@ router.post('/auth/register',
     createAccount
 )
 
-router.post('/auth/login',  
-    body('email')  
+router.post('/auth/login',
+    body('email')
         .isEmail()
         .withMessage('Invlid e-mail.'),
     body('password')
         .notEmpty()
         .withMessage("The password is mandatory."),
-        
+
     handleInputErros,
 
     login
 )
 
 router.get('/user', authenticate, getUser)
+
+router.patch('/user',
+
+    body('handle')
+        .notEmpty()
+        .withMessage("The handle is mandatory."),
+    body('description')
+        .notEmpty()
+        .withMessage("The description is mandatory."),
+
+    handleInputErros,
+    authenticate,
+    updateProfile
+)
 
 export default router;
